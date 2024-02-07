@@ -21,3 +21,13 @@ jobs:
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Retrieve S3 Endpoint
+        run: |
+          # Use AWS CLI to retrieve S3 bucket endpoint
+          endpoint=$(aws s3api get-bucket-location --bucket $AWS_S3_BUCKET --query 'LocationConstraint' --output text)
+          echo "::set-output name=s3-endpoint::$endpoint"
+
+      - name: Print Endpoint
+        run: |
+          echo "S3 Endpoint: ${{ steps.retrieve-s3-endpoint.outputs.s3-endpoint }}"
